@@ -1,0 +1,21 @@
+<!-- index.html -->
+<script>
+  const socket = new WebSocket("ws://localhost:3000");
+
+  socket.onopen = () => {
+    console.log("Connected to server.");
+  };
+
+  socket.onmessage = (event) => {
+    console.log("Received message from server:", event.data);
+  };
+
+  function sendMessage() {
+    console.log("send message function");
+    const message = document.getElementById("messageInput").value;
+    socket.send(message);
+  }
+</script>
+
+<input type="text" id="messageInput" placeholder="Type your message" />
+<button onclick="sendMessage()">Send</button>
