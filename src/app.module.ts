@@ -7,6 +7,8 @@ import { MySqlConfigService } from './config/mysql.config.service';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { GatewayModule } from './gateway/gateway.module';
+import { MessageModule } from './message/message.module';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 
 @Module({
   imports: [
@@ -17,6 +19,8 @@ import { GatewayModule } from './gateway/gateway.module';
     AuthModule,
     UserModule,
     GatewayModule,
+    MessageModule,
+    EventEmitterModule.forRoot(),
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -6,6 +6,7 @@ import { urlencoded, json } from 'express';
 import { ValidationPipe } from '@nestjs/common';
 import { TransformInterceptor } from './transformer/transform-interceptor';
 import { WsAdapter } from '@nestjs/platform-ws';
+import { WsCustomAdapter } from './gateway/gateway.adapter';
 
 async function bootstrap() {
   dotenv.config();
@@ -14,7 +15,7 @@ async function bootstrap() {
 
   app.useGlobalInterceptors(new TransformInterceptor());
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
-  app.useWebSocketAdapter(new WsAdapter(app));
+  app.useWebSocketAdapter(new WsCustomAdapter(app));
   const config = new DocumentBuilder()
     .setTitle('Mis Api Documentation')
     .setVersion('V1')

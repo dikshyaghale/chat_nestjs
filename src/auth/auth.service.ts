@@ -5,6 +5,8 @@ import { v4 as uuid } from 'uuid';
 import { JwtService } from '@nestjs/jwt';
 import { UserHashedTokenEntity } from 'src/user/entity/user-hashed-token.entity';
 import { LoginDto } from './dto/login.dto';
+import * as jwt from 'jsonwebtoken';
+import { JsonWebTokenError, JwtPayload } from 'jsonwebtoken';
 
 @Injectable()
 export class AuthService {
@@ -67,4 +69,35 @@ export class AuthService {
       expiresIn: process.env.JWT_REFRESH_EXPIRE_IN,
     });
   };
+
+  validate(token: any) {
+    return this.verifyAsync(token, process.env.JWT_SECRET);
+  }
+
+  private verifyAsync(token: string, secret: string): Promise<any> {
+    return new Promise((resolve, reject) => {
+      jwt.verify(token, process.env.JWT_SECRET, (err, decoded: JwtPayload) => {
+        if (err) {
+          // Handle the error here
+          console.error(`Token verification failed: ${err.message}`);
+
+          if (err instanceof JsonWebTokenError) {
+            // reject(new Error('Invalid token, please log in again.'));
+            throw new Error('Invalid token, please log in again.');
+          } else {
+            reject(err);
+          }
+        } else {
+          resolve(decoded);
+        }
+      });
+    });
+
+    // return new Promise((resolve, reject) => {
+    //   jwt.verify(token, secret, (err, payload) => {
+    //     if (err) reject(err);
+    //     else resolve(payload);
+    //   });
+    // });
+  }
 }
